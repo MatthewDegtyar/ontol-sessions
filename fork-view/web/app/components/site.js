@@ -23,7 +23,6 @@ export function Nav() {
           <Link className="nav-section" href="/#how">How it works</Link>
           <Link className="nav-section" href="/#next">What&apos;s next</Link>
           <Link href="/pairs">Comparisons</Link>
-          <Link className="btn small primary" href="/demo">Try the demo</Link>
         </div>
       </div>
     </nav>

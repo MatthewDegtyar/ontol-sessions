@@ -1,6 +1,5 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import Link from "next/link";
 import ForkExplorer, { Files } from "./components/product";
 import { CONTACT } from "./components/site";
 
@@ -41,10 +40,11 @@ export default function Home() {
               ProductOlogy maps your client forks against your main product, so anyone can see what was added,
               why it was built, and what belongs back in the product.
             </p>
-            <div className="actions">
-              <Link className="btn primary" href="/demo">Try the live demo</Link>
-              {CONTACT && <a className="btn" href={CONTACT}>Talk to us</a>}
-            </div>
+            {CONTACT && (
+              <div className="actions">
+                <a className="btn primary" href={CONTACT}>Talk to us</a>
+              </div>
+            )}
             <div className="preview">
               <div className="frame">
                 <div className="frame-bar"><span>Sample product: Harbor, with two fictional clients</span></div>
@@ -157,11 +157,12 @@ export default function Home() {
         <section className="closing">
           <div className="wrap">
             <h2>What can your clients do that your product can&apos;t?</h2>
-            <p>See how the answer could look on a sample product.</p>
-            <div className="actions">
-              <Link className="btn primary" href="/demo">Try the live demo</Link>
-              {CONTACT && <a className="btn" href={CONTACT}>Talk to us</a>}
-            </div>
+            <p>Scroll up to see how the answer looks on a sample product.</p>
+            {CONTACT && (
+              <div className="actions">
+                <a className="btn primary" href={CONTACT}>Talk to us</a>
+              </div>
+            )}
           </div>
         </section>
       </main>
