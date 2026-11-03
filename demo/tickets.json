@@ -1,0 +1,5 @@
+[
+ {"key":"HAR-101","title":"Nightly shipment export to SFTP for Northwind","client":"Northwind","owner":"sam","status":"Done","pr":"#412","description":"Northwind needs yesterday's shipments delivered as a CSV to their SFTP server every night."},
+ {"key":"HAR-109","title":"Audit log retention of 7 years for Northwind","client":"Northwind","owner":"jo","status":"In Progress","pr":null,"description":"Keep audit logs for 7 years to meet Northwind's contract."},
+ {"key":"HAR-117","title":"Nightly shipment export to S3 for Globex","client":"Globex","owner":"lee","status":"To Do","pr":null,"description":"Globex wants a nightly CSV of shipments delivered to their S3 bucket."}
+]

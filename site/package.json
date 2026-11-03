@@ -1,0 +1,1 @@
+{"name":"ontol-sessions-site","private":true,"version":"0.1.0","scripts":{"dev":"next dev -p 3600","build":"next build","start":"next start -p 3600"},"dependencies":{"next":"^15.5.28","react":"^19.3.1","react-dom":"^19.3.1"}}

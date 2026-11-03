@@ -1,0 +1,2 @@
+{"type": "user", "uuid": "s3000000-0", "sessionId": "s3000000", "timestamp": "2026-04-14T10:00:00Z", "cwd": "/work/harbor", "gitBranch": "main", "message": {"role": "user", "content": [{"type": "text", "text": "Why is the dev server so slow to start?"}]}}
+{"type": "assistant", "uuid": "s3000000-1", "sessionId": "s3000000", "timestamp": "2026-04-14T10:01:00Z", "cwd": "/work/harbor", "gitBranch": "main", "message": {"role": "assistant", "content": [{"type": "text", "text": "It rebuilds the type cache on every start. Pointing the cache at a persistent folder fixes it."}]}}
