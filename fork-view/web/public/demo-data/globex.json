@@ -1,0 +1,540 @@
+{
+ "view": {
+  "id": "globex",
+  "name": "Globex",
+  "counts": {
+   "added": 3,
+   "changed": 1,
+   "same": 7,
+   "removed": 0
+  },
+  "main": [
+   {
+    "id": "audit",
+    "items": [
+     {
+      "key": "GET /audit",
+      "name": "View the audit log",
+      "status": "same",
+      "group": "audit",
+      "summary": null,
+      "changed": null,
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
+     }
+    ]
+   },
+   {
+    "id": "exports",
+    "items": [
+     {
+      "key": "GET /exports/csv",
+      "name": "Download a daily CSV",
+      "status": "same",
+      "group": "exports",
+      "summary": null,
+      "changed": null,
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
+     }
+    ]
+   },
+   {
+    "id": "invoices",
+    "items": [
+     {
+      "key": "GET /invoices",
+      "name": "See invoices",
+      "status": "same",
+      "group": "invoices",
+      "summary": null,
+      "changed": null,
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
+     },
+     {
+      "key": "POST /invoices/{id}/send",
+      "name": "Send an invoice",
+      "status": "changed",
+      "group": "invoices",
+      "summary": null,
+      "changed": "An invoice can't be sent without a PO number.",
+      "also": [],
+      "reason": "needed this because Globex's finance team rejects any invoice without a PO number",
+      "owner": "lee",
+      "ticket": "HAR-124"
+     }
+    ]
+   },
+   {
+    "id": "shipments",
+    "items": [
+     {
+      "key": "POST /shipments",
+      "name": "Create a shipment",
+      "status": "same",
+      "group": "shipments",
+      "summary": null,
+      "changed": null,
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
+     },
+     {
+      "key": "GET /shipments",
+      "name": "See all shipments",
+      "status": "same",
+      "group": "shipments",
+      "summary": null,
+      "changed": null,
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
+     },
+     {
+      "key": "GET /shipments/{id}/tracking",
+      "name": "Track a shipment",
+      "status": "same",
+      "group": "shipments",
+      "summary": null,
+      "changed": null,
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
+     }
+    ]
+   },
+   {
+    "id": "users",
+    "items": [
+     {
+      "key": "POST /users/invite",
+      "name": "Invite a teammate",
+      "status": "same",
+      "group": "users",
+      "summary": null,
+      "changed": null,
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
+     }
+    ]
+   }
+  ],
+  "client": [
+   {
+    "key": "POST /portal/shipments/{id}/issue",
+    "name": "Customers report a problem",
+    "status": "added",
+    "group": "portal",
+    "summary": "A customer can report a problem with a shipment, which opens a support ticket.",
+    "changed": null,
+    "also": [],
+    "reason": "needed this so customers can report a problem without leaving the portal",
+    "owner": "lee",
+    "ticket": "HAR-121",
+    "edge": {
+     "from": "GET /portal/shipments",
+     "via": "Same /portal routes",
+     "kind": "chained"
+    },
+    "files": {
+     "count": 2,
+     "additions": 12,
+     "deletions": 0
+    }
+   },
+   {
+    "key": "GET /portal/shipments",
+    "name": "Customers see their own shipments",
+    "status": "added",
+    "group": "portal",
+    "summary": "Globex's customers can log in and see their own shipments without contacting support.",
+    "changed": null,
+    "also": [],
+    "reason": "needed this because Globex's customers kept emailing support to ask where their shipments were",
+    "owner": "lee",
+    "ticket": "HAR-121",
+    "edge": {
+     "from": "GET /shipments",
+     "via": "Both use db.shipments",
+     "kind": "added"
+    },
+    "files": {
+     "count": 4,
+     "additions": 20,
+     "deletions": 0
+    }
+   },
+   {
+    "key": "POST /exports/s3/schedule",
+    "name": "Nightly export to S3",
+    "status": "added",
+    "group": "exports",
+    "summary": "Yesterday's shipments arrive in the client's S3 bucket every night, with no one clicking anything.",
+    "changed": null,
+    "also": [
+     "Northwind"
+    ],
+    "reason": "needed this because Globex's data team loads shipments from their S3 bucket every night",
+    "owner": "lee",
+    "ticket": "HAR-117",
+    "edge": {
+     "from": "GET /exports/csv",
+     "via": "Both call db.shipments.on",
+     "kind": "added"
+    },
+    "files": {
+     "count": 2,
+     "additions": 9,
+     "deletions": 0
+    }
+   },
+   {
+    "key": "POST /invoices/{id}/send",
+    "name": "Send an invoice",
+    "status": "changed",
+    "group": "invoices",
+    "summary": null,
+    "changed": "An invoice can't be sent without a PO number.",
+    "also": [],
+    "reason": "needed this because Globex's finance team rejects any invoice without a PO number",
+    "owner": "lee",
+    "ticket": "HAR-124",
+    "edge": {
+     "from": "POST /invoices/{id}/send",
+     "via": "Same route, different code",
+     "kind": "changed"
+    },
+    "files": {
+     "count": 3,
+     "additions": 6,
+     "deletions": 2
+    }
+   }
+  ],
+  "unattributed": []
+ },
+ "capabilities": {
+  "POST /portal/shipments/{id}/issue": {
+   "key": "POST /portal/shipments/{id}/issue",
+   "name": "Customers report a problem",
+   "status": "added",
+   "group": "portal",
+   "summary": "A customer can report a problem with a shipment, which opens a support ticket.",
+   "changed": null,
+   "also": [],
+   "reason": "needed this so customers can report a problem without leaving the portal",
+   "owner": "lee",
+   "ticket": "HAR-121",
+   "work": {
+    "ticket": "HAR-121",
+    "owner": "lee",
+    "asked": "Customers need a way to report a shipment problem from the portal.",
+    "why": "It opens a ticket in the existing support queue, so the support process didn't change.",
+    "files": [
+     "web/portal/IssueForm.tsx"
+    ],
+    "reason": "needed this so customers can report a problem without leaving the portal"
+   },
+   "siblings": [],
+   "edge": {
+    "from": "GET /portal/shipments",
+    "via": "Same /portal routes",
+    "kind": "chained"
+   },
+   "files": [
+    {
+     "path": "routes/portal.py",
+     "status": "added",
+     "additions": 8,
+     "deletions": 0,
+     "diff": [
+      "@@ -0,0 +1,8 @@",
+      "+@router.get(\"/portal/shipments\")",
+      "+def customer_shipments(user: CustomerUser):",
+      "+    return db.shipments.for_customer(user.customer_id)",
+      "+",
+      "+",
+      "+@router.post(\"/portal/shipments/{id}/issue\")",
+      "+def report_issue(id: str, body: Issue, user: CustomerUser):",
+      "+    return support.open_ticket(id, body, reporter=user)"
+     ]
+    },
+    {
+     "path": "web/portal/IssueForm.tsx",
+     "status": "added",
+     "additions": 4,
+     "deletions": 0,
+     "diff": [
+      "@@ -0,0 +1,4 @@",
+      "+export function IssueForm({ shipmentId }) {",
+      "+  const report = useReportIssue(shipmentId);",
+      "+  return <Form onSubmit={report}><TextArea name=\"details\" required /></Form>;",
+      "+}"
+     ]
+    }
+   ],
+   "advice": {
+    "kind": "keep",
+    "text": "Only this client has it so far. Keep it in the fork until a second client asks."
+   }
+  },
+  "GET /portal/shipments": {
+   "key": "GET /portal/shipments",
+   "name": "Customers see their own shipments",
+   "status": "added",
+   "group": "portal",
+   "summary": "Globex's customers can log in and see their own shipments without contacting support.",
+   "changed": null,
+   "also": [],
+   "reason": "needed this because Globex's customers kept emailing support to ask where their shipments were",
+   "owner": "lee",
+   "ticket": "HAR-121",
+   "work": {
+    "ticket": "HAR-121",
+    "owner": "lee",
+    "asked": "Globex's customers keep emailing support to ask where their shipments are.",
+    "why": "It was built as a separate customer login so customers can't reach internal screens.",
+    "files": [
+     "auth/customer_login.py",
+     "migrations/021_customer_users.sql",
+     "web/portal/Shipments.tsx"
+    ],
+    "reason": "needed this because Globex's customers kept emailing support to ask where their shipments were"
+   },
+   "siblings": [],
+   "edge": {
+    "from": "GET /shipments",
+    "via": "Both use db.shipments",
+    "kind": "added"
+   },
+   "files": [
+    {
+     "path": "routes/portal.py",
+     "status": "added",
+     "additions": 8,
+     "deletions": 0,
+     "diff": [
+      "@@ -0,0 +1,8 @@",
+      "+@router.get(\"/portal/shipments\")",
+      "+def customer_shipments(user: CustomerUser):",
+      "+    return db.shipments.for_customer(user.customer_id)",
+      "+",
+      "+",
+      "+@router.post(\"/portal/shipments/{id}/issue\")",
+      "+def report_issue(id: str, body: Issue, user: CustomerUser):",
+      "+    return support.open_ticket(id, body, reporter=user)"
+     ]
+    },
+    {
+     "path": "auth/customer_login.py",
+     "status": "added",
+     "additions": 3,
+     "deletions": 0,
+     "diff": [
+      "@@ -0,0 +1,3 @@",
+      "+def customer_session(email, code):",
+      "+    user = db.customer_users.verify(email, code)",
+      "+    return issue_session(user, scope=\"portal\")"
+     ]
+    },
+    {
+     "path": "migrations/021_customer_users.sql",
+     "status": "added",
+     "additions": 5,
+     "deletions": 0,
+     "diff": [
+      "@@ -0,0 +1,5 @@",
+      "+CREATE TABLE customer_users (",
+      "+  id UUID PRIMARY KEY,",
+      "+  customer_id UUID NOT NULL REFERENCES customers(id),",
+      "+  email TEXT NOT NULL UNIQUE",
+      "+);"
+     ]
+    },
+    {
+     "path": "web/portal/Shipments.tsx",
+     "status": "added",
+     "additions": 4,
+     "deletions": 0,
+     "diff": [
+      "@@ -0,0 +1,4 @@",
+      "+export function PortalShipments() {",
+      "+  const { data } = useSWR(\"/portal/shipments\");",
+      "+  return <ShipmentList rows={data} />;",
+      "+}"
+     ]
+    }
+   ],
+   "advice": {
+    "kind": "keep",
+    "text": "Only this client has it so far. Keep it in the fork until a second client asks."
+   }
+  },
+  "POST /exports/s3/schedule": {
+   "key": "POST /exports/s3/schedule",
+   "name": "Nightly export to S3",
+   "status": "added",
+   "group": "exports",
+   "summary": "Yesterday's shipments arrive in the client's S3 bucket every night, with no one clicking anything.",
+   "changed": null,
+   "also": [
+    "Northwind"
+   ],
+   "reason": "needed this because Globex's data team loads shipments from their S3 bucket every night",
+   "owner": "lee",
+   "ticket": "HAR-117",
+   "work": {
+    "ticket": "HAR-117",
+    "owner": "lee",
+    "asked": "Globex wants a nightly CSV of shipments delivered to their S3 bucket.",
+    "why": "It was built on the plain scheduler, without the retry protection Northwind's export ended up needing.",
+    "files": [
+     "clients/globex/s3.py"
+    ],
+    "reason": "needed this because Globex's data team loads shipments from their S3 bucket every night"
+   },
+   "siblings": [
+    {
+     "fork": "northwind",
+     "client": "Northwind",
+     "key": "POST /exports/sftp/schedule",
+     "name": "Nightly export to SFTP",
+     "ticket": "HAR-101"
+    }
+   ],
+   "edge": {
+    "from": "GET /exports/csv",
+    "via": "Both call db.shipments.on",
+    "kind": "added"
+   },
+   "files": [
+    {
+     "path": "routes/exports_s3.py",
+     "status": "added",
+     "additions": 4,
+     "deletions": 0,
+     "diff": [
+      "@@ -0,0 +1,4 @@",
+      "+@router.post(\"/exports/s3/schedule\")",
+      "+def schedule_s3_export(body: S3Schedule):",
+      "+    rows = db.shipments.on(body.day)",
+      "+    return scheduler.nightly(upload_s3, rows, body)"
+     ]
+    },
+    {
+     "path": "clients/globex/s3.py",
+     "status": "added",
+     "additions": 5,
+     "deletions": 0,
+     "diff": [
+      "@@ -0,0 +1,5 @@",
+      "+def upload_s3(rows, schedule):",
+      "+    body = to_csv(rows)",
+      "+    s3_client(schedule.role_arn).put_object(",
+      "+        Bucket=schedule.bucket, Key=f\"shipments/{schedule.day}.csv\", Body=body",
+      "+    )"
+     ]
+    }
+   ],
+   "advice": {
+    "kind": "merge",
+    "text": "Built twice. Northwind has its own version, so this is a candidate for main."
+   }
+  },
+  "POST /invoices/{id}/send": {
+   "key": "POST /invoices/{id}/send",
+   "name": "Send an invoice",
+   "status": "changed",
+   "group": "invoices",
+   "summary": null,
+   "changed": "An invoice can't be sent without a PO number.",
+   "also": [],
+   "reason": "needed this because Globex's finance team rejects any invoice without a PO number",
+   "owner": "lee",
+   "ticket": "HAR-124",
+   "work": {
+    "ticket": "HAR-124",
+    "owner": "lee",
+    "asked": "Globex's finance team rejects any invoice with no PO number.",
+    "why": "The PO number was made mandatory in the fork, which would break other clients if merged as is.",
+    "changed": "An invoice can't be sent without a PO number.",
+    "files": [
+     "migrations/022_invoice_po_number.sql",
+     "web/invoices/SendDialog.tsx"
+    ],
+    "reason": "needed this because Globex's finance team rejects any invoice without a PO number"
+   },
+   "siblings": [],
+   "edge": {
+    "from": "POST /invoices/{id}/send",
+    "via": "Same route, different code",
+    "kind": "changed"
+   },
+   "files": [
+    {
+     "path": "routes/invoices.py",
+     "status": "modified",
+     "additions": 2,
+     "deletions": 1,
+     "diff": [
+      "@@ -4,7 +4,8 @@",
+      " ",
+      " ",
+      " @router.post(\"/invoices/{id}/send\")",
+      "-def send_invoice(id: str):",
+      "+def send_invoice(id: str, po_number: str):",
+      "     invoice = db.invoices.get(id)",
+      "+    invoice.require_po(po_number)",
+      "     mailer.send(invoice.contact, render_pdf(invoice))",
+      "     return {\"sent\": True}"
+     ]
+    },
+    {
+     "path": "migrations/022_invoice_po_number.sql",
+     "status": "added",
+     "additions": 1,
+     "deletions": 0,
+     "diff": [
+      "@@ -0,0 +1 @@",
+      "+ALTER TABLE invoices ADD COLUMN po_number TEXT;"
+     ]
+    },
+    {
+     "path": "web/invoices/SendDialog.tsx",
+     "status": "modified",
+     "additions": 3,
+     "deletions": 1,
+     "diff": [
+      "@@ -1,7 +1,9 @@",
+      " export function SendDialog({ invoice, onSend }) {",
+      "+  const [po, setPo] = useState(invoice.po_number ?? \"\");",
+      "   return (",
+      "     <Dialog title={`Send invoice ${invoice.number}`}>",
+      "-      <Button onClick={() => onSend(invoice.id)}>Send</Button>",
+      "+      <TextField label=\"PO number\" value={po} onChange={setPo} required />",
+      "+      <Button disabled={!po} onClick={() => onSend(invoice.id, po)}>Send</Button>",
+      "     </Dialog>",
+      "   );",
+      " }"
+     ]
+    }
+   ],
+   "advice": {
+    "kind": "review",
+    "text": "This changes something every client shares, so check it before merging it back."
+   }
+  }
+ }
+}

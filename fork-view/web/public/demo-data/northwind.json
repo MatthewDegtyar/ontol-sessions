@@ -1,0 +1,468 @@
+{
+ "view": {
+  "id": "northwind",
+  "name": "Northwind",
+  "counts": {
+   "added": 2,
+   "changed": 1,
+   "same": 7,
+   "removed": 0
+  },
+  "main": [
+   {
+    "id": "audit",
+    "items": [
+     {
+      "key": "GET /audit",
+      "name": "View the audit log",
+      "status": "changed",
+      "group": "audit",
+      "summary": null,
+      "changed": "Retention is set per client instead of 1 year for everyone.",
+      "also": [],
+      "reason": "needed this because Northwind's contract requires 7 years of audit logs",
+      "owner": "jo",
+      "ticket": "HAR-109"
+     }
+    ]
+   },
+   {
+    "id": "exports",
+    "items": [
+     {
+      "key": "GET /exports/csv",
+      "name": "Download a daily CSV",
+      "status": "same",
+      "group": "exports",
+      "summary": null,
+      "changed": null,
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
+     }
+    ]
+   },
+   {
+    "id": "invoices",
+    "items": [
+     {
+      "key": "GET /invoices",
+      "name": "See invoices",
+      "status": "same",
+      "group": "invoices",
+      "summary": null,
+      "changed": null,
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
+     },
+     {
+      "key": "POST /invoices/{id}/send",
+      "name": "Send an invoice",
+      "status": "same",
+      "group": "invoices",
+      "summary": null,
+      "changed": null,
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
+     }
+    ]
+   },
+   {
+    "id": "shipments",
+    "items": [
+     {
+      "key": "POST /shipments",
+      "name": "Create a shipment",
+      "status": "same",
+      "group": "shipments",
+      "summary": null,
+      "changed": null,
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
+     },
+     {
+      "key": "GET /shipments",
+      "name": "See all shipments",
+      "status": "same",
+      "group": "shipments",
+      "summary": null,
+      "changed": null,
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
+     },
+     {
+      "key": "GET /shipments/{id}/tracking",
+      "name": "Track a shipment",
+      "status": "same",
+      "group": "shipments",
+      "summary": null,
+      "changed": null,
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
+     }
+    ]
+   },
+   {
+    "id": "users",
+    "items": [
+     {
+      "key": "POST /users/invite",
+      "name": "Invite a teammate",
+      "status": "same",
+      "group": "users",
+      "summary": null,
+      "changed": null,
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
+     }
+    ]
+   }
+  ],
+  "client": [
+   {
+    "key": "POST /shipments/{id}/customs-hold",
+    "name": "Hold a shipment for customs",
+    "status": "added",
+    "group": "shipments",
+    "summary": "Staff can stop a shipment and record why customs is holding it.",
+    "changed": null,
+    "also": [],
+    "reason": "needed this because Northwind ships across borders and ops had no way to pause a shipment held at customs",
+    "owner": "sam",
+    "ticket": "HAR-104",
+    "edge": {
+     "from": "GET /shipments",
+     "via": "Both use db.shipments",
+     "kind": "added"
+    },
+    "files": {
+     "count": 4,
+     "additions": 12,
+     "deletions": 0
+    }
+   },
+   {
+    "key": "POST /exports/sftp/schedule",
+    "name": "Nightly export to SFTP",
+    "status": "added",
+    "group": "exports",
+    "summary": "Yesterday's shipments arrive on the client's SFTP server every night, with no one clicking anything.",
+    "changed": null,
+    "also": [
+     "Globex"
+    ],
+    "reason": "needed this so Northwind's billing gets yesterday's shipments every night, without anyone exporting by hand",
+    "owner": "sam",
+    "ticket": "HAR-101",
+    "edge": {
+     "from": "GET /exports/csv",
+     "via": "Both call db.shipments.on",
+     "kind": "added"
+    },
+    "files": {
+     "count": 3,
+     "additions": 17,
+     "deletions": 0
+    }
+   },
+   {
+    "key": "GET /audit",
+    "name": "View the audit log",
+    "status": "changed",
+    "group": "audit",
+    "summary": null,
+    "changed": "Retention is set per client instead of 1 year for everyone.",
+    "also": [],
+    "reason": "needed this because Northwind's contract requires 7 years of audit logs",
+    "owner": "jo",
+    "ticket": "HAR-109",
+    "edge": {
+     "from": "GET /audit",
+     "via": "Same route, different code",
+     "kind": "changed"
+    },
+    "files": {
+     "count": 3,
+     "additions": 6,
+     "deletions": 3
+    }
+   }
+  ],
+  "unattributed": []
+ },
+ "capabilities": {
+  "POST /shipments/{id}/customs-hold": {
+   "key": "POST /shipments/{id}/customs-hold",
+   "name": "Hold a shipment for customs",
+   "status": "added",
+   "group": "shipments",
+   "summary": "Staff can stop a shipment and record why customs is holding it.",
+   "changed": null,
+   "also": [],
+   "reason": "needed this because Northwind ships across borders and ops had no way to pause a shipment held at customs",
+   "owner": "sam",
+   "ticket": "HAR-104",
+   "work": {
+    "ticket": "HAR-104",
+    "owner": "sam",
+    "asked": "Northwind's operations team needs to pause shipments held at customs.",
+    "why": "It was built only for Northwind because no other client ships across borders yet.",
+    "files": [
+     "migrations/014_customs_hold.sql",
+     "web/shipments/HoldButton.tsx",
+     "web/shipments/ShipmentRow.tsx"
+    ],
+    "reason": "needed this because Northwind ships across borders and ops had no way to pause a shipment held at customs"
+   },
+   "siblings": [],
+   "edge": {
+    "from": "GET /shipments",
+    "via": "Both use db.shipments",
+    "kind": "added"
+   },
+   "files": [
+    {
+     "path": "routes/shipments.py",
+     "status": "modified",
+     "additions": 5,
+     "deletions": 0,
+     "diff": [
+      "@@ -11,3 +11,8 @@",
+      " @router.get(\"/shipments/{id}/tracking\")",
+      " def track_shipment(id: str):",
+      "     return carriers.latest_events(id)",
+      "+",
+      "+",
+      "+@router.post(\"/shipments/{id}/customs-hold\")",
+      "+def hold_for_customs(id: str, body: HoldReason):",
+      "+    return db.shipments.set_hold(id, body.reason)"
+     ]
+    },
+    {
+     "path": "migrations/014_customs_hold.sql",
+     "status": "added",
+     "additions": 2,
+     "deletions": 0,
+     "diff": [
+      "@@ -0,0 +1,2 @@",
+      "+ALTER TABLE shipments ADD COLUMN hold_reason TEXT;",
+      "+ALTER TABLE shipments ADD COLUMN held_at TIMESTAMPTZ;"
+     ]
+    },
+    {
+     "path": "web/shipments/HoldButton.tsx",
+     "status": "added",
+     "additions": 4,
+     "deletions": 0,
+     "diff": [
+      "@@ -0,0 +1,4 @@",
+      "+export function HoldButton({ shipment }) {",
+      "+  const hold = useHold(shipment.id);",
+      "+  return <Button onClick={() => hold.ask()}>Hold for customs</Button>;",
+      "+}"
+     ]
+    },
+    {
+     "path": "web/shipments/ShipmentRow.tsx",
+     "status": "modified",
+     "additions": 1,
+     "deletions": 0,
+     "diff": [
+      "@@ -3,6 +3,7 @@",
+      "     <tr>",
+      "       <td>{shipment.reference}</td>",
+      "       <td><Status value={shipment.status} /></td>",
+      "+      <td><HoldButton shipment={shipment} /></td>",
+      "     </tr>",
+      "   );",
+      " }"
+     ]
+    }
+   ],
+   "advice": {
+    "kind": "keep",
+    "text": "Only this client has it so far. Keep it in the fork until a second client asks."
+   }
+  },
+  "POST /exports/sftp/schedule": {
+   "key": "POST /exports/sftp/schedule",
+   "name": "Nightly export to SFTP",
+   "status": "added",
+   "group": "exports",
+   "summary": "Yesterday's shipments arrive on the client's SFTP server every night, with no one clicking anything.",
+   "changed": null,
+   "also": [
+    "Globex"
+   ],
+   "reason": "needed this so Northwind's billing gets yesterday's shipments every night, without anyone exporting by hand",
+   "owner": "sam",
+   "ticket": "HAR-101",
+   "work": {
+    "ticket": "HAR-101",
+    "owner": "sam",
+    "asked": "Northwind needs yesterday's shipments delivered as a CSV to their SFTP server every night.",
+    "why": "A plain cron job sent the file twice after a restart, which would have double-counted shipments in billing. It moved to the job queue with an idempotency key.",
+    "quote": "Keep the column mapping in clients/northwind for now. We'd need a second client to know what's generic.",
+    "files": [
+     "clients/northwind/mapping.py",
+     "clients/northwind/sftp.py"
+    ],
+    "reason": "needed this so Northwind's billing gets yesterday's shipments every night, without anyone exporting by hand"
+   },
+   "siblings": [
+    {
+     "fork": "globex",
+     "client": "Globex",
+     "key": "POST /exports/s3/schedule",
+     "name": "Nightly export to S3",
+     "ticket": "HAR-117"
+    }
+   ],
+   "edge": {
+    "from": "GET /exports/csv",
+    "via": "Both call db.shipments.on",
+    "kind": "added"
+   },
+   "files": [
+    {
+     "path": "routes/exports_sftp.py",
+     "status": "added",
+     "additions": 6,
+     "deletions": 0,
+     "diff": [
+      "@@ -0,0 +1,6 @@",
+      "+@router.post(\"/exports/sftp/schedule\")",
+      "+def schedule_sftp_export(body: SftpSchedule):",
+      "+    # The idempotency key stops a retry from sending a second file.",
+      "+    key = f\"{body.client}:{body.day}\"",
+      "+    rows = db.shipments.on(body.day)",
+      "+    return queue.enqueue(send_sftp, rows, body, idempotency_key=key)"
+     ]
+    },
+    {
+     "path": "clients/northwind/mapping.py",
+     "status": "added",
+     "additions": 7,
+     "deletions": 0,
+     "diff": [
+      "@@ -0,0 +1,7 @@",
+      "+# Northwind's column names. Kept out of core until a second client shows what's generic.",
+      "+COLUMNS = {",
+      "+    \"reference\": \"NW_REF\",",
+      "+    \"shipped_at\": \"DESPATCH_DT\",",
+      "+    \"carrier\": \"HAULIER\",",
+      "+    \"weight_kg\": \"GROSS_KG\",",
+      "+}"
+     ]
+    },
+    {
+     "path": "clients/northwind/sftp.py",
+     "status": "added",
+     "additions": 4,
+     "deletions": 0,
+     "diff": [
+      "@@ -0,0 +1,4 @@",
+      "+def send_sftp(rows, schedule):",
+      "+    body = to_csv(rows, columns=COLUMNS)",
+      "+    with sftp_connect(schedule.host, schedule.credential_ref) as conn:",
+      "+        conn.put(f\"shipments-{schedule.day}.csv\", body)"
+     ]
+    }
+   ],
+   "advice": {
+    "kind": "merge",
+    "text": "Built twice. Globex has its own version, so this is a candidate for main."
+   }
+  },
+  "GET /audit": {
+   "key": "GET /audit",
+   "name": "View the audit log",
+   "status": "changed",
+   "group": "audit",
+   "summary": null,
+   "changed": "Retention is set per client instead of 1 year for everyone.",
+   "also": [],
+   "reason": "needed this because Northwind's contract requires 7 years of audit logs",
+   "owner": "jo",
+   "ticket": "HAR-109",
+   "work": {
+    "ticket": "HAR-109",
+    "owner": "jo",
+    "asked": "Keep audit logs for 7 years to meet Northwind's contract.",
+    "why": "The retention setting was global, so raising it would have kept every client's logs for 7 years at about 6x the storage cost. It became a per-client override with a 1-year default.",
+    "changed": "Retention is set per client instead of 1 year for everyone.",
+    "files": [
+     "core/settings.py",
+     "migrations/015_retention_override.sql"
+    ],
+    "reason": "needed this because Northwind's contract requires 7 years of audit logs"
+   },
+   "siblings": [],
+   "edge": {
+    "from": "GET /audit",
+    "via": "Same route, different code",
+    "kind": "changed"
+   },
+   "files": [
+    {
+     "path": "routes/audit.py",
+     "status": "modified",
+     "additions": 4,
+     "deletions": 3,
+     "diff": [
+      "@@ -1,6 +1,7 @@",
+      "-RETENTION_DAYS = 365",
+      "+def retention_days(client):",
+      "+    return settings.retention_override(client) or 365",
+      " ",
+      " ",
+      " @router.get(\"/audit\")",
+      "-def audit_log(since: date):",
+      "-    return db.audit.since(max(since, today() - days(RETENTION_DAYS)))",
+      "+def audit_log(since: date, client: str):",
+      "+    return db.audit.since(max(since, today() - days(retention_days(client))))"
+     ]
+    },
+    {
+     "path": "core/settings.py",
+     "status": "modified",
+     "additions": 1,
+     "deletions": 0,
+     "diff": [
+      "@@ -1,2 +1,3 @@",
+      " AUDIT_RETENTION_DAYS = 365",
+      "+AUDIT_RETENTION_OVERRIDES = {\"northwind\": 2555}  # 7 years, per contract",
+      " DEFAULT_TIMEZONE = \"UTC\""
+     ]
+    },
+    {
+     "path": "migrations/015_retention_override.sql",
+     "status": "added",
+     "additions": 1,
+     "deletions": 0,
+     "diff": [
+      "@@ -0,0 +1 @@",
+      "+ALTER TABLE clients ADD COLUMN audit_retention_days INTEGER;"
+     ]
+    }
+   ],
+   "advice": {
+    "kind": "review",
+    "text": "This changes something every client shares, so check it before merging it back."
+   }
+  }
+ }
+}

@@ -1,0 +1,94 @@
+{
+ "northwind": {
+  "name": "Northwind",
+  "dir": "fork-northwind",
+  "work": {
+   "POST /exports/sftp/schedule": {
+    "ticket": "HAR-101",
+    "owner": "sam",
+    "asked": "Northwind needs yesterday's shipments delivered as a CSV to their SFTP server every night.",
+    "why": "A plain cron job sent the file twice after a restart, which would have double-counted shipments in billing. It moved to the job queue with an idempotency key.",
+    "quote": "Keep the column mapping in clients/northwind for now. We'd need a second client to know what's generic.",
+    "files": [
+     "clients/northwind/mapping.py",
+     "clients/northwind/sftp.py"
+    ],
+    "reason": "needed this so Northwind's billing gets yesterday's shipments every night, without anyone exporting by hand"
+   },
+   "POST /shipments/{id}/customs-hold": {
+    "ticket": "HAR-104",
+    "owner": "sam",
+    "asked": "Northwind's operations team needs to pause shipments held at customs.",
+    "why": "It was built only for Northwind because no other client ships across borders yet.",
+    "files": [
+     "migrations/014_customs_hold.sql",
+     "web/shipments/HoldButton.tsx",
+     "web/shipments/ShipmentRow.tsx"
+    ],
+    "reason": "needed this because Northwind ships across borders and ops had no way to pause a shipment held at customs"
+   },
+   "GET /audit": {
+    "ticket": "HAR-109",
+    "owner": "jo",
+    "asked": "Keep audit logs for 7 years to meet Northwind's contract.",
+    "why": "The retention setting was global, so raising it would have kept every client's logs for 7 years at about 6x the storage cost. It became a per-client override with a 1-year default.",
+    "changed": "Retention is set per client instead of 1 year for everyone.",
+    "files": [
+     "core/settings.py",
+     "migrations/015_retention_override.sql"
+    ],
+    "reason": "needed this because Northwind's contract requires 7 years of audit logs"
+   }
+  }
+ },
+ "globex": {
+  "name": "Globex",
+  "dir": "fork-globex",
+  "work": {
+   "POST /exports/s3/schedule": {
+    "ticket": "HAR-117",
+    "owner": "lee",
+    "asked": "Globex wants a nightly CSV of shipments delivered to their S3 bucket.",
+    "why": "It was built on the plain scheduler, without the retry protection Northwind's export ended up needing.",
+    "files": [
+     "clients/globex/s3.py"
+    ],
+    "reason": "needed this because Globex's data team loads shipments from their S3 bucket every night"
+   },
+   "GET /portal/shipments": {
+    "ticket": "HAR-121",
+    "owner": "lee",
+    "asked": "Globex's customers keep emailing support to ask where their shipments are.",
+    "why": "It was built as a separate customer login so customers can't reach internal screens.",
+    "files": [
+     "auth/customer_login.py",
+     "migrations/021_customer_users.sql",
+     "web/portal/Shipments.tsx"
+    ],
+    "reason": "needed this because Globex's customers kept emailing support to ask where their shipments were"
+   },
+   "POST /portal/shipments/{id}/issue": {
+    "ticket": "HAR-121",
+    "owner": "lee",
+    "asked": "Customers need a way to report a shipment problem from the portal.",
+    "why": "It opens a ticket in the existing support queue, so the support process didn't change.",
+    "files": [
+     "web/portal/IssueForm.tsx"
+    ],
+    "reason": "needed this so customers can report a problem without leaving the portal"
+   },
+   "POST /invoices/{id}/send": {
+    "ticket": "HAR-124",
+    "owner": "lee",
+    "asked": "Globex's finance team rejects any invoice with no PO number.",
+    "why": "The PO number was made mandatory in the fork, which would break other clients if merged as is.",
+    "changed": "An invoice can't be sent without a PO number.",
+    "files": [
+     "migrations/022_invoice_po_number.sql",
+     "web/invoices/SendDialog.tsx"
+    ],
+    "reason": "needed this because Globex's finance team rejects any invoice without a PO number"
+   }
+  }
+ }
+}
