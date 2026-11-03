@@ -1,0 +1,2 @@
+ALTER TABLE shipments ADD COLUMN hold_reason TEXT;
+ALTER TABLE shipments ADD COLUMN held_at TIMESTAMPTZ;

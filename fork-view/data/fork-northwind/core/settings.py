@@ -1,0 +1,3 @@
+AUDIT_RETENTION_DAYS = 365
+AUDIT_RETENTION_OVERRIDES = {"northwind": 2555}  # 7 years, per contract
+DEFAULT_TIMEZONE = "UTC"

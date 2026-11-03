@@ -1,0 +1,48 @@
+{
+ "GET /shipments": {
+  "name": "See all shipments"
+ },
+ "POST /shipments": {
+  "name": "Create a shipment"
+ },
+ "GET /shipments/{id}/tracking": {
+  "name": "Track a shipment"
+ },
+ "POST /shipments/{id}/customs-hold": {
+  "name": "Hold a shipment for customs",
+  "summary": "Staff can stop a shipment and record why customs is holding it."
+ },
+ "GET /invoices": {
+  "name": "See invoices"
+ },
+ "POST /invoices/{id}/send": {
+  "name": "Send an invoice"
+ },
+ "GET /exports/csv": {
+  "name": "Download a daily CSV"
+ },
+ "POST /exports/sftp/schedule": {
+  "name": "Nightly export to SFTP",
+  "family": "scheduled-export",
+  "summary": "Yesterday's shipments arrive on the client's SFTP server every night, with no one clicking anything."
+ },
+ "POST /exports/s3/schedule": {
+  "name": "Nightly export to S3",
+  "family": "scheduled-export",
+  "summary": "Yesterday's shipments arrive in the client's S3 bucket every night, with no one clicking anything."
+ },
+ "GET /audit": {
+  "name": "View the audit log"
+ },
+ "POST /users/invite": {
+  "name": "Invite a teammate"
+ },
+ "GET /portal/shipments": {
+  "name": "Customers see their own shipments",
+  "summary": "Globex's customers can log in and see their own shipments without contacting support."
+ },
+ "POST /portal/shipments/{id}/issue": {
+  "name": "Customers report a problem",
+  "summary": "A customer can report a problem with a shipment, which opens a support ticket."
+ }
+}

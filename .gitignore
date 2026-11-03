@@ -6,3 +6,6 @@ node_modules/
 .vercel/
 .env*
 next-env.d.ts
+.venv/
+fork-view/worker/jobs/
+fork-view/web/public/pairs/
