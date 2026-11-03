@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Files } from "./product";
-import { Logo } from "./site";
 
 const get = (url) => fetch(url).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
 // A running production site can't see files added after it starts, so live mode reads results from the API.
@@ -80,7 +79,7 @@ export function PairView({ id }) {
     return () => ro.disconnect();
   }, [measure, modules.length]);
 
-  if (error) return <div className="app-main"><Logo /><p>We couldn&apos;t find this comparison.</p></div>;
+  if (error) return <div className="app-main"><p>We couldn&apos;t find this comparison. <Link href="/pairs">See all comparisons</Link></p></div>;
   if (!pair) return <div className="app-main"><p className="muted">Loading…</p></div>;
   const ignored = Object.entries(pair.ignored);
   const fresh = pair.modules.filter((m) => m.is_new).length;
@@ -88,7 +87,6 @@ export function PairView({ id }) {
   return (
     <div className={open ? "layout with-detail" : "layout"}>
       <div className="app-main">
-        <div className="pair-top"><Logo /><Link href="/pairs" className="btn small">All comparisons</Link></div>
         <h1>What {pair.fork.split("/")[0]} changed in {pair.main.split("/")[1]}</h1>
         <p className="pair-repos">
           <a href={`https://github.com/${pair.fork}/tree/${pair.fork_branch}`} rel="noreferrer" target="_blank">{pair.fork}</a> compared with{" "}
@@ -132,8 +130,7 @@ export function PairList() {
   useEffect(() => { get(`${results}/index.json`).then(setPairs).catch(() => setPairs([])); }, []);
   return (
     <div className="app-main">
-      <Logo />
-      <h1>Compared repos</h1>
+      <h1>Comparisons</h1>
       {pairs && pairs.length === 0 && <p className="muted">No comparisons yet.</p>}
       <ul className="pair-list">
         {(pairs || []).map((p) => (

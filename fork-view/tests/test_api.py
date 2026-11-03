@@ -201,3 +201,13 @@ def test_other_sites_cant_start_jobs(tmp_path, monkeypatch):
     assert p.post("/api/pairs", json={"main": "a/b", "fork": "c/d"}, headers={"origin": "https://evil.test"}).status_code == 403
     assert p.post("/api/pairs", json={"main": "a/b", "fork": "c/d"}, headers={"host": "evil.test"}).status_code == 403
     assert list(tmp_path.iterdir()) == []
+
+
+def test_every_extension_says_why_it_was_needed():
+    for fork in ("northwind", "globex"):
+        for c in c_get(fork)["client"]:
+            assert c["reason"].startswith("needed this") and c["owner"] and c["ticket"], c["key"]
+
+
+def c_get(fork):
+    return c.get(f"/api/compare/{fork}").json()

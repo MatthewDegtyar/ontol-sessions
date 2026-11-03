@@ -58,7 +58,7 @@ h1 { font-size: clamp(30px, 4.500vw, 46px); line-height: 1.08; letter-spacing: -
 .ext strong { font-weight: 600; }
 .via { font-size: 12.500px; color: var(--muted); padding-left: 24px; }
 .twice { font-size: 12.500px; color: var(--twice); font-weight: 600; padding-left: 24px; }
-.detail { position: sticky; top: 0; height: 100vh; overflow-y: auto; background: var(--panel); border-left: 1px solid var(--line); padding: 22px; z-index: 5; }
+.detail { position: sticky; top: 61px; height: calc(100vh - 61px); overflow-y: auto; background: var(--panel); border-left: 1px solid var(--line); padding: 22px; z-index: 5; }
 .close { float: right; width: 36px; height: 36px; border: 0; background: none; font-size: 24px; line-height: 1; color: var(--muted); }
 .status { font-size: 13px; font-weight: 650; margin: 0 0 4px; }
 .status.added { color: var(--add); } .status.changed { color: var(--chg); }
@@ -174,7 +174,7 @@ a:focus-visible { outline: 2px solid var(--add); outline-offset: 2px; }
   .band { padding: 64px 0; }
   .hero { padding-top: 56px; }
 }
-@media (max-width: 560px) { .nav-links a:not(.btn) { display: none; } }
+@media (max-width: 560px) { .nav-section { display: none; } }
 
 .chain { list-style: none; padding: 0; margin: 0 0 56px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; counter-reset: none; }
 .chain li { position: relative; display: flex; flex-direction: column; gap: 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; min-width: 0; }
@@ -239,7 +239,7 @@ a:focus-visible { outline: 2px solid var(--add); outline-offset: 2px; }
 }
 
 .switch { margin-left: auto; }
-.demo-head { max-width: 1120px; margin: 0 auto; padding: 18px 16px 0; }
+.demo-head { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
 .compare-form { margin-top: 18px; padding: 16px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; }
 .compare-form h1 { font-size: clamp(26px, 4vw, 34px); line-height: 1.15; margin: 0 0 16px; letter-spacing: -0.02em; }
 .compare-fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: 10px; align-items: end; }
@@ -252,7 +252,7 @@ a:focus-visible { outline: 2px solid var(--add); outline-offset: 2px; }
 .compare-status { margin: 12px 0 0; font-size: 14px; color: var(--muted); }
 .compare-status.error { color: #f7b1a6; }
 @media (max-width: 720px) { .compare-fields { grid-template-columns: 1fr; } .compare-fields .btn { width: 100%; } }
-.compare-form { margin-top: 12vh; padding: 24px; }
+.compare-form { margin-top: 10vh; padding: 24px; }
 
 .compare-banner { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin: 0 0 16px; padding: 12px 14px; border: 1px solid var(--add); background: var(--add-bg); border-radius: 9px; }
 .compare-banner p { margin: 0; overflow-wrap: anywhere; min-width: 0; }
@@ -261,3 +261,12 @@ a:focus-visible { outline: 2px solid var(--add); outline-offset: 2px; }
 .spinner { display: inline-block; width: 13px; height: 13px; margin-right: 8px; vertical-align: -2px; border: 2px solid var(--line); border-top-color: var(--add); border-radius: 50%; animation: spin .8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 3s; } }
+.app-main h1:first-child { margin-top: 12px; }
+.nav .wrap { flex-wrap: nowrap; }
+@media (max-width: 560px) { .nav-links { gap: 12px; } .logo { font-size: 15px; } }
+
+.comment { position: relative; display: flex; gap: 8px; align-items: flex-start; margin: 7px 0 2px 24px; padding: 8px 10px; border-radius: 4px 10px 10px 10px; background: rgb(255 255 255 / .06); border: 1px solid rgb(255 255 255 / .08); text-align: left; }
+.avatar { flex: none; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--panel-2); border: 1px solid var(--line); font-size: 11.500px; font-weight: 700; text-transform: uppercase; color: var(--ink); }
+.comment-body { font-size: 13px; line-height: 1.45; color: var(--ink); font-style: italic; overflow-wrap: anywhere; }
+.comment-who { display: block; font-style: normal; font-size: 11.500px; font-weight: 650; color: var(--muted); margin-bottom: 1px; }
+.ext.changed .comment, .ext.added .comment { background: rgb(0 0 0 / .22); }

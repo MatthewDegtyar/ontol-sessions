@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import Link from "next/link";
 import ForkExplorer, { Files } from "./components/product";
-import { CONTACT, Logo } from "./components/site";
+import { CONTACT } from "./components/site";
 
 const globex = JSON.parse(readFileSync(path.join(process.cwd(), "public/demo-data/globex.json"), "utf8"));
 const poNumber = globex.capabilities["POST /invoices/{id}/send"];
@@ -33,18 +33,6 @@ const roadmap = [
 export default function Home() {
   return (
     <>
-      <nav className="nav" aria-label="Main">
-        <div className="wrap">
-          <Logo />
-          <div className="nav-links">
-            <a href="#problem">Problem</a>
-            <a href="#how">How it works</a>
-            <a href="#next">What&apos;s next</a>
-            <Link className="btn small primary" href="/demo">Try the demo</Link>
-          </div>
-        </div>
-      </nav>
-
       <main>
         <header className="hero">
           <div className="wrap">

@@ -196,6 +196,12 @@ function Graph({ view, open, setOpen }) {
             <span className="ext-top"><Icon id={c.group} size={16} /><strong>{c.status === "changed" ? c.changed : c.name}</strong></span>
             <span className="via">{c.status === "changed" ? `Changes “${c.name}”` : c.edge?.via || "No shared code found"}</span>
             {c.also.length > 0 && <span className="twice">Also built for {c.also.join(", ")}</span>}
+            {c.reason && (
+              <span className="comment">
+                <span className="avatar" aria-hidden="true">{c.owner[0]}</span>
+                <span className="comment-body"><span className="comment-who">{c.owner} · {c.ticket}</span>{c.reason}</span>
+              </span>
+            )}
             <span className="filecount">{plural(c.files.count, "file")} <Delta add={c.files.additions} del={c.files.deletions} /></span>
           </button>
         ))}

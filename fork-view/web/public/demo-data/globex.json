@@ -19,7 +19,10 @@
       "group": "audit",
       "summary": null,
       "changed": null,
-      "also": []
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
      }
     ]
    },
@@ -33,7 +36,10 @@
       "group": "exports",
       "summary": null,
       "changed": null,
-      "also": []
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
      }
     ]
    },
@@ -47,7 +53,10 @@
       "group": "invoices",
       "summary": null,
       "changed": null,
-      "also": []
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
      },
      {
       "key": "POST /invoices/{id}/send",
@@ -56,7 +65,10 @@
       "group": "invoices",
       "summary": null,
       "changed": "An invoice can't be sent without a PO number.",
-      "also": []
+      "also": [],
+      "reason": "needed this because Globex's finance team rejects any invoice without a PO number",
+      "owner": "lee",
+      "ticket": "HAR-124"
      }
     ]
    },
@@ -70,7 +82,10 @@
       "group": "shipments",
       "summary": null,
       "changed": null,
-      "also": []
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
      },
      {
       "key": "GET /shipments",
@@ -79,7 +94,10 @@
       "group": "shipments",
       "summary": null,
       "changed": null,
-      "also": []
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
      },
      {
       "key": "GET /shipments/{id}/tracking",
@@ -88,7 +106,10 @@
       "group": "shipments",
       "summary": null,
       "changed": null,
-      "also": []
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
      }
     ]
    },
@@ -102,7 +123,10 @@
       "group": "users",
       "summary": null,
       "changed": null,
-      "also": []
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
      }
     ]
    }
@@ -116,6 +140,9 @@
     "summary": "A customer can report a problem with a shipment, which opens a support ticket.",
     "changed": null,
     "also": [],
+    "reason": "needed this so customers can report a problem without leaving the portal",
+    "owner": "lee",
+    "ticket": "HAR-121",
     "edge": {
      "from": "GET /portal/shipments",
      "via": "Same /portal routes",
@@ -135,6 +162,9 @@
     "summary": "Globex's customers can log in and see their own shipments without contacting support.",
     "changed": null,
     "also": [],
+    "reason": "needed this because Globex's customers kept emailing support to ask where their shipments were",
+    "owner": "lee",
+    "ticket": "HAR-121",
     "edge": {
      "from": "GET /shipments",
      "via": "Both use db.shipments",
@@ -156,6 +186,9 @@
     "also": [
      "Northwind"
     ],
+    "reason": "needed this because Globex's data team loads shipments from their S3 bucket every night",
+    "owner": "lee",
+    "ticket": "HAR-117",
     "edge": {
      "from": "GET /exports/csv",
      "via": "Both call db.shipments.on",
@@ -175,6 +208,9 @@
     "summary": null,
     "changed": "An invoice can't be sent without a PO number.",
     "also": [],
+    "reason": "needed this because Globex's finance team rejects any invoice without a PO number",
+    "owner": "lee",
+    "ticket": "HAR-124",
     "edge": {
      "from": "POST /invoices/{id}/send",
      "via": "Same route, different code",
@@ -198,6 +234,9 @@
    "summary": "A customer can report a problem with a shipment, which opens a support ticket.",
    "changed": null,
    "also": [],
+   "reason": "needed this so customers can report a problem without leaving the portal",
+   "owner": "lee",
+   "ticket": "HAR-121",
    "work": {
     "ticket": "HAR-121",
     "owner": "lee",
@@ -205,7 +244,8 @@
     "why": "It opens a ticket in the existing support queue, so the support process didn't change.",
     "files": [
      "web/portal/IssueForm.tsx"
-    ]
+    ],
+    "reason": "needed this so customers can report a problem without leaving the portal"
    },
    "siblings": [],
    "edge": {
@@ -258,6 +298,9 @@
    "summary": "Globex's customers can log in and see their own shipments without contacting support.",
    "changed": null,
    "also": [],
+   "reason": "needed this because Globex's customers kept emailing support to ask where their shipments were",
+   "owner": "lee",
+   "ticket": "HAR-121",
    "work": {
     "ticket": "HAR-121",
     "owner": "lee",
@@ -267,7 +310,8 @@
      "auth/customer_login.py",
      "migrations/021_customer_users.sql",
      "web/portal/Shipments.tsx"
-    ]
+    ],
+    "reason": "needed this because Globex's customers kept emailing support to ask where their shipments were"
    },
    "siblings": [],
    "edge": {
@@ -348,6 +392,9 @@
    "also": [
     "Northwind"
    ],
+   "reason": "needed this because Globex's data team loads shipments from their S3 bucket every night",
+   "owner": "lee",
+   "ticket": "HAR-117",
    "work": {
     "ticket": "HAR-117",
     "owner": "lee",
@@ -355,7 +402,8 @@
     "why": "It was built on the plain scheduler, without the retry protection Northwind's export ended up needing.",
     "files": [
      "clients/globex/s3.py"
-    ]
+    ],
+    "reason": "needed this because Globex's data team loads shipments from their S3 bucket every night"
    },
    "siblings": [
     {
@@ -413,6 +461,9 @@
    "summary": null,
    "changed": "An invoice can't be sent without a PO number.",
    "also": [],
+   "reason": "needed this because Globex's finance team rejects any invoice without a PO number",
+   "owner": "lee",
+   "ticket": "HAR-124",
    "work": {
     "ticket": "HAR-124",
     "owner": "lee",
@@ -422,7 +473,8 @@
     "files": [
      "migrations/022_invoice_po_number.sql",
      "web/invoices/SendDialog.tsx"
-    ]
+    ],
+    "reason": "needed this because Globex's finance team rejects any invoice without a PO number"
    },
    "siblings": [],
    "edge": {

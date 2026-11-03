@@ -135,7 +135,8 @@ def unattributed(fork):
 def describe(fork, key, status):
     label = LABELS.get(key, {})
     return {"key": key, "name": label.get("name", key), "status": status, "group": group_of(key), "summary": label.get("summary"),
-            "changed": FORKS[fork]["work"].get(key, {}).get("changed"), "also": [s["client"] for s in siblings(fork, key)]}
+            "changed": FORKS[fork]["work"].get(key, {}).get("changed"), "also": [s["client"] for s in siblings(fork, key)],
+            **{k: FORKS[fork]["work"].get(key, {}).get(k) for k in ("reason", "owner", "ticket")}}
 
 
 def connect(fork, status):

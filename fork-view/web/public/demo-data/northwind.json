@@ -19,7 +19,10 @@
       "group": "audit",
       "summary": null,
       "changed": "Retention is set per client instead of 1 year for everyone.",
-      "also": []
+      "also": [],
+      "reason": "needed this because Northwind's contract requires 7 years of audit logs",
+      "owner": "jo",
+      "ticket": "HAR-109"
      }
     ]
    },
@@ -33,7 +36,10 @@
       "group": "exports",
       "summary": null,
       "changed": null,
-      "also": []
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
      }
     ]
    },
@@ -47,7 +53,10 @@
       "group": "invoices",
       "summary": null,
       "changed": null,
-      "also": []
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
      },
      {
       "key": "POST /invoices/{id}/send",
@@ -56,7 +65,10 @@
       "group": "invoices",
       "summary": null,
       "changed": null,
-      "also": []
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
      }
     ]
    },
@@ -70,7 +82,10 @@
       "group": "shipments",
       "summary": null,
       "changed": null,
-      "also": []
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
      },
      {
       "key": "GET /shipments",
@@ -79,7 +94,10 @@
       "group": "shipments",
       "summary": null,
       "changed": null,
-      "also": []
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
      },
      {
       "key": "GET /shipments/{id}/tracking",
@@ -88,7 +106,10 @@
       "group": "shipments",
       "summary": null,
       "changed": null,
-      "also": []
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
      }
     ]
    },
@@ -102,7 +123,10 @@
       "group": "users",
       "summary": null,
       "changed": null,
-      "also": []
+      "also": [],
+      "reason": null,
+      "owner": null,
+      "ticket": null
      }
     ]
    }
@@ -116,6 +140,9 @@
     "summary": "Staff can stop a shipment and record why customs is holding it.",
     "changed": null,
     "also": [],
+    "reason": "needed this because Northwind ships across borders and ops had no way to pause a shipment held at customs",
+    "owner": "sam",
+    "ticket": "HAR-104",
     "edge": {
      "from": "GET /shipments",
      "via": "Both use db.shipments",
@@ -137,6 +164,9 @@
     "also": [
      "Globex"
     ],
+    "reason": "needed this so Northwind's billing gets yesterday's shipments every night, without anyone exporting by hand",
+    "owner": "sam",
+    "ticket": "HAR-101",
     "edge": {
      "from": "GET /exports/csv",
      "via": "Both call db.shipments.on",
@@ -156,6 +186,9 @@
     "summary": null,
     "changed": "Retention is set per client instead of 1 year for everyone.",
     "also": [],
+    "reason": "needed this because Northwind's contract requires 7 years of audit logs",
+    "owner": "jo",
+    "ticket": "HAR-109",
     "edge": {
      "from": "GET /audit",
      "via": "Same route, different code",
@@ -179,6 +212,9 @@
    "summary": "Staff can stop a shipment and record why customs is holding it.",
    "changed": null,
    "also": [],
+   "reason": "needed this because Northwind ships across borders and ops had no way to pause a shipment held at customs",
+   "owner": "sam",
+   "ticket": "HAR-104",
    "work": {
     "ticket": "HAR-104",
     "owner": "sam",
@@ -188,7 +224,8 @@
      "migrations/014_customs_hold.sql",
      "web/shipments/HoldButton.tsx",
      "web/shipments/ShipmentRow.tsx"
-    ]
+    ],
+    "reason": "needed this because Northwind ships across borders and ops had no way to pause a shipment held at customs"
    },
    "siblings": [],
    "edge": {
@@ -270,6 +307,9 @@
    "also": [
     "Globex"
    ],
+   "reason": "needed this so Northwind's billing gets yesterday's shipments every night, without anyone exporting by hand",
+   "owner": "sam",
+   "ticket": "HAR-101",
    "work": {
     "ticket": "HAR-101",
     "owner": "sam",
@@ -279,7 +319,8 @@
     "files": [
      "clients/northwind/mapping.py",
      "clients/northwind/sftp.py"
-    ]
+    ],
+    "reason": "needed this so Northwind's billing gets yesterday's shipments every night, without anyone exporting by hand"
    },
    "siblings": [
     {
@@ -354,6 +395,9 @@
    "summary": null,
    "changed": "Retention is set per client instead of 1 year for everyone.",
    "also": [],
+   "reason": "needed this because Northwind's contract requires 7 years of audit logs",
+   "owner": "jo",
+   "ticket": "HAR-109",
    "work": {
     "ticket": "HAR-109",
     "owner": "jo",
@@ -363,7 +407,8 @@
     "files": [
      "core/settings.py",
      "migrations/015_retention_override.sql"
-    ]
+    ],
+    "reason": "needed this because Northwind's contract requires 7 years of audit logs"
    },
    "siblings": [],
    "edge": {
